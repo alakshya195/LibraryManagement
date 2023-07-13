@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Books - Add to Cart</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* General styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+
+    /* Header styles */
+    header {
+      background-color: #232f3e;
+      color: #fff;
+      padding: 16px;
+      text-align: center;
+    }
+
+    /* Product card styles */
+    .product-card {
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin: 16px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .product-card img {
+      width: 140px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+
+    .product-card h3 {
+      font-size: 16px;
+      margin: 0;
+      margin-bottom: 8px;
+    }
+
+    .product-card p {
+      font-size: 14px;
+      margin: 0;
+      margin-bottom: 8px;
+    }
+
+    .product-card .options {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 16px;
+    }
+
+    /* Cart styles */
+    .cart-container {
+      background-color: #fff;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin: 16px;
+      padding: 16px;
+    }
+
+    .cart-container h2 {
+      font-size: 20px;
+      margin: 0;
+      margin-bottom: 16px;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .cart-item img {
+      width: 30px;
+      height: 30px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-right: 8px;
+    }
+
+    .cart-item span {
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    /* Payment options styles */
+    .payment-options {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 16px;
+    }
+
+    .payment-options img {
+      width: 30px;
+      height: 30px;
+      margin: 0 8px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Library Books</h1>
+  </header>
+
+  <div class="container">
+    <div class="row justify-content-center">
+
+      <div class="col-md-4">
+        <div class="product-card">
+          <img src="book1.jpg" alt="Book 1">
+          <h3>Book 1</h3>
+          <p>Author: Author 1</p>
+          <p>Genre: Fiction</p>
+          <p>Year: 2021</p>
+          <div class="options">
+            <button class="btn btn-primary" onclick="addToCart('Book 1', 'purchase')">Buy Now</button>
+            <button class="btn btn-primary" onclick="addToCart('Book 1', 'rent')">Rent</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="product-card">
+          <img src="book2.jpg" alt="Book 2">
+          <h3>Book 2</h3>
+          <p>Author: Author 2</p>
+          <p>Genre: Mystery</p>
+          <p>Year: 2019</p>
+          <div class="options">
+            <button class="btn btn-primary" onclick="addToCart('Book 2', 'purchase')">Buy Now</button>
+            <button class="btn btn-primary" onclick="addToCart('Book 2', 'rent')">Rent</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="product-card">
+          <img src="book3.jpg" alt="Book 3">
+          <h3>Book 3</h3>
+          <p>Author: Author 3</p>
+          <p>Genre: Sci-Fi</p>
+          <p>Year: 2020</p>
+          <div class="options">
+            <button class="btn btn-primary" onclick="addToCart('Book 3', 'purchase')">Buy Now</button>
+            <button class="btn btn-primary" onclick="addToCart('Book 3', 'rent')">Rent</button>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- row -->
+  </div> <!-- container -->
+
+  <div class="cart-container">
+    <h2>Cart</h2>
+    <div id="cartItemsContainer"></div>
+    <div class="payment-options">
+      <img src="visa.png" alt="Visa">
+      <img src="mastercard.png" alt="Mastercard">
+      <img src="upi.png" alt="UPI">
+    </div>
+    <div class="text-right mt-4">
+      <h4>Total Price: <span id="totalPrice">0</span></h4>
+    </div>
+  </div>
+
+  <!-- Bootstrap JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    const cartItems = [];
+
+    function addToCart(bookName, option) {
+      cartItems.push({ name: bookName, option: option });
+      updateCartDisplay();
+    }
+
+    function updateCartDisplay() {
+      const cartItemsContainer = document.getElementById("cartItemsContainer");
+      cartItemsContainer.innerHTML = "";
+
+      if (cartItems.length === 0) {
+        cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
+        return;
+      }
+
+      cartItems.forEach(function (item) {
+        const cartItemElement = document.createElement("div");
+        cartItemElement.classList.add("cart-item");
+        cartItemElement.innerHTML = `
+          <img src="${getBookImage(item.name)}" alt="${item.name}">
+          <span>${item.name} - ${getOptionText(item.option)}</span>
+        `;
+
+        cartItemsContainer.appendChild(cartItemElement);
+      });
+
+      calculateTotalPrice();
+    }
+
+    function getBookImage(bookName) {
+      // Replace with your own logic to fetch the book image based on the book name
+      // For simplicity, using placeholder image URLs
+      if (bookName === "Book 1") {
+        return "book1.jpg";
+      } else if (bookName === "Book 2") {
+        return "book2.jpg";
+      } else if (bookName === "Book 3") {
+        return "book3.jpg";
+      }
+
+      return "";
+    }
+
+    function getOptionText(option) {
+      if (option === "purchase") {
+        return "Purchased";
+      } else if (option === "rent") {
+        return "Rented";
+      }
+
+      return "";
+    }
+
+    function calculateTotalPrice() {
+      const totalPriceElement = document.getElementById("totalPrice");
+      let totalPrice = 0;
+
+      cartItems.forEach(function (item) {
+        if (item.option === "purchase") {
+          totalPrice += 10; // Replace with the actual price for purchasing the book
+        } else if (item.option === "rent") {
+          totalPrice += 5; // Replace with the actual price for renting the book
+        }
+      });
+
+      totalPriceElement.textContent = totalPrice;
+    }
+  </script>
+</body>
+</html>
+
